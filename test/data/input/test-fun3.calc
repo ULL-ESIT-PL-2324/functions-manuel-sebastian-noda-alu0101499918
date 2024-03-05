@@ -1,0 +1,5 @@
+sum = fun (n) {
+  fun(x) { n+x }
+},
+r = sum(4)(5),
+print(r) # 9

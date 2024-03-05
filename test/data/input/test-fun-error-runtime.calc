@@ -1,0 +1,3 @@
+inc = fun(x) { x+ 1 },
+double = fun(x) { 2*x },
+three = inc + double

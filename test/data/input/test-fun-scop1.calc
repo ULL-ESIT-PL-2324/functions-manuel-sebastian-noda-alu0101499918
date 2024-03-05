@@ -1,0 +1,6 @@
+f = fun (a) {
+  x = a+2, # x is local to the function
+  3*x
+},
+b = f(4),  # b is global
+print(b)   # 18

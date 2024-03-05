@@ -1,0 +1,7 @@
+f = fun (a) {
+  x = a+2i, # x is local
+  3i*x
+},
+b = f(4),
+print(b), # -6+12i
+print(x)  # error
