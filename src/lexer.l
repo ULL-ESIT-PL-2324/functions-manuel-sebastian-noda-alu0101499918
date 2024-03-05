@@ -1,9 +1,11 @@
 %{
-const reservedWords = ["print","fun", "true", "false", "i"]  
+const reservedWords = ["fun", "true", "false", "i"]  
+const predefinedIds = ["print", "write"]
 
 const idOrReserved = text => {
                  //console.log(reservedWords);
                  if (reservedWords.find(w => w == text)) return text.toUpperCase();
+                 if(predefinedIds-find(w => W == text)) return 'PID'
                  return 'ID';
                }
 %}

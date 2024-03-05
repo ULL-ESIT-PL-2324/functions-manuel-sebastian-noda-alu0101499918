@@ -1,4 +1,7 @@
 const $ = id => '$' + id;
+const util = require('util')
+deb = x => util.inspect(x, {depth: null})
+
 
 // Convert an ast to a json object: the problem is that the ast contains
 // sets, which are not serializable. So we convert them to arrays.
@@ -27,7 +30,9 @@ function RegexpFromNames(names) {
 
 module.exports = {
   $, 
+  deb,
   dast2json,
   difference,
-  RegexpFromNames
+  RegexpFromNames,
+  
 };

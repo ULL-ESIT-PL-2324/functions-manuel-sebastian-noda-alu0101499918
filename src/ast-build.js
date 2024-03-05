@@ -59,19 +59,35 @@ function buildIdentifier(name) {
 }
 
 function buildVariableDeclaration(declarations) {
-  // Write you code here
+  return {
+    type: "VariableDeclaration",
+    declarations: declarations,
+    kind: "let",
+  };
 }
 
 function buildVariableDeclarator(id) {
-  // Write you code here
+  return {
+    type: "VariableDeclarator",
+    id: id,
+    init: null,
+  };
 }
 
 function buildAssignmentExpression(name, operator, right) {
-  // Write you code here
+  return {
+    type: "AssignmentExpression",
+    operator,
+    left: buildIdentifier(name),
+    right: right,
+  };
 }
 
 function buildSequenceExpression(expressions) {
-  // Write you code here
+  return {
+    type: "SequenceExpression",
+    expressions: expressions,
+  };
 }
 
 function buildUnaryExpression(operator, child, prefix = true) {
@@ -84,11 +100,33 @@ function buildUnaryExpression(operator, child, prefix = true) {
 }
 
 function buildCallMemberExpression(caller, names, args) {
-  // Write you code here
+  let namesList = names.split('.');
+  return {
+    type: "CallExpression",
+    callee: buildMemberExpression(caller, namesList),
+    arguments: args,
+  };
 }
 
 function buildMemberExpression(caller, names) {
-  // Write you code here
+  if (names.length === 1) {
+    return {
+      type: "MemberExpression",
+      property: {
+        type: "Identifier",
+        name: names.pop()
+      },
+      object: caller
+    };
+  }
+  return {
+    type: "MemberExpression",
+    property: {
+      type: "Identifier",
+      name: names.pop()
+    },
+    object: buildMemberExpression(caller, names),
+  };
 }
 
 function buildMin(left, right, reservedWord = false) {
@@ -104,7 +142,56 @@ function buildLogicalExpression(left, operator, right) {
 }
 
 function buildFunctionExpression(params, exp) {
-  // Write you code here
+  return {
+    type: "FunctionExpression",
+    id: null,
+    params: params,
+    body: {
+      type: "BlockStatement",
+      body:[
+        {
+          "type": "ReturnStatement",
+          "argument": {
+            "type": "Identifier",
+            "name": "$b"
+          }
+        }
+      ],
+    },
+    generator: false,
+    async: false,
+    expression: false,
+  };
+}
+
+function buildIdCalls (id, calls) {
+ let n = buildIdentifier(id);
+  n = {
+    type: "CallExpression",
+    callee: n,
+    arguments: calls[0]
+  };
+  return n;
+}
+
+function buildIdentifierOrCalls(name, calls) {
+  let id = {
+    type: "Identifier",
+    name: name,
+  };
+  if(calls.length === 0) return id;
+
+  debugger;
+  let node = id;
+  calls.forEach(ast => {
+    let parent = {
+      type: "CallExpression",
+      callee: node,
+      arguments: ast === null? [] : [ ast ],
+    };
+    node = parent;
+  });
+  return node;
 }
 
 module.exports = {
@@ -112,5 +199,17 @@ module.exports = {
   buildBinaryExpression,
   buildLiteral,
   buildCallExpression,
+  buildUnaryExpression,
+  buildVariableDeclaration,
+  buildVariableDeclarator,
+  buildIdentifierOrCalls,
+  buildAssignmentExpression,
+  buildSequenceExpression,
+  buildCallMemberExpression,
+  buildMin,
+  buildMax,
+  buildLogicalExpression,
+  buildFunctionExpression,
+  buildIdCalls
   // export whatever you need
 }
