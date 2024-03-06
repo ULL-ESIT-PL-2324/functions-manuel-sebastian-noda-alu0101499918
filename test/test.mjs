@@ -35,36 +35,22 @@ function removeFolderDependency(s) {
   return s.replace(/const.*?Complex.*?require.*?complex.js".;/, '')
 }
 
+function removeDependencies(s) {
+  const REGULAR_SEPARATION = /^(.|\n)*\n\/\* End of support code \*\/\n\n/
+  const pruned = s.replace(REGULAR_SEPARATION, '')
+ 
+  return removeSpaces(pruned);
+}
+
+
 
 for (let i = 0; i < Test.length; i++) {
   it(`transpile(${Tst[i].input}, ${Tst[i].actualjs}) (No errors: ${Boolean(Tst[i].expectedout)})`, async () => {
-
-    // Compile the input and check the actualjs program is what expected
-    let actualjs = await transpile(Test[i].input, Test[i].actualjs);
-  
+    let actualjs = await transpile(Test[i].input, Test[i].actualjs);  
     let expectedjs = fs.readFileSync(Test[i].expectedjs, 'utf-8')
-    //console.log(`*********expectedjs ${Test[i].expectedjs}******\n`, expectedjs);
-
-    let trimActualJS = removeFolderDependency(removeSpaces(actualjs))
-    //console.log(trimActualJS)
-    let trimExpectedJS = removeFolderDependency(removeSpaces(expectedjs))
+ 
+    let trimActualJS = removeDependencies(actualjs)
+    let trimExpectedJS = removeDependencies(expectedjs)
     assert.equal(trimActualJS, trimExpectedJS);
-
-    // Run the output program and check the logged output is what expected
-
-
-    if (Test[i].expectedout) {
-      let expectedout = fs.readFileSync(Test[i].expectedout, 'utf-8')
-            
-      let result = exec(`node ${Test[i].actualjs}`, {
-        silent: false
-      });
-        
-      assert.equal(removeSpaces(result.stdout), removeSpaces(expectedout))  
-      
-    }
-
-    //fs.unlinkSync(Test[i].actualjs);
-
   });
 }

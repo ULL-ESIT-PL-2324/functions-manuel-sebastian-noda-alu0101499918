@@ -5,7 +5,7 @@ const predefinedIds = ["print", "write"]
 const idOrReserved = text => {
                  //console.log(reservedWords);
                  if (reservedWords.find(w => w == text)) return text.toUpperCase();
-                 if(predefinedIds-find(w => W == text)) return 'PID'
+                 if(predefinedIds-find(w => w == text)) return 'PID'
                  return 'ID';
                }
 %}

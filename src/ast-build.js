@@ -164,15 +164,7 @@ function buildFunctionExpression(params, exp) {
   };
 }
 
-function buildIdCalls (id, calls) {
- let n = buildIdentifier(id);
-  n = {
-    type: "CallExpression",
-    callee: n,
-    arguments: calls[0]
-  };
-  return n;
-}
+
 
 function buildIdentifierOrCalls(name, calls) {
   let id = {
@@ -192,6 +184,19 @@ function buildIdentifierOrCalls(name, calls) {
     node = parent;
   });
   return node;
+}
+
+function buildIdCalls(id, calls) {
+  let n = buildIdentifier(id);
+  calls.forEach( args => {
+    let parent = {
+      type: "CallExpression",
+      callee: n,
+      arguments: args
+    }
+    n = parent;
+  })
+  return n;
 }
 
 module.exports = {
