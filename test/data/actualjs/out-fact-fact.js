@@ -1,5 +1,2 @@
 #!/usr/bin/env node
-const $factorial = n => (n === 0) ? 1 : n * $factorial(n - 1);
-const $power = Math.pow;
-const $print = x => { console.log(x); return x; };
-$factorial(2) * $factorial(3);
+const { factorial, Complex } = require("/home/usuario/practicas/practica_5/functions-manuel-sebastian-noda-alu0101499918/src/support-lib.js");factorial(Complex("2")).mul(factorial(Complex("3")));

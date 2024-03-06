@@ -1,5 +1,9 @@
 const { $ } = require('./utils.js')
 
+/**
+ * @desc Builds the root node of the AST
+ * @param {*} child
+ */
 function buildRoot(child) {
   return {
     type: "Program",
@@ -13,15 +17,24 @@ function buildRoot(child) {
   };
 }
 
-
+/**
+ * @desc Builds a literal node of the AST
+ * @param {*} value 
+ */
 function buildLiteral(value) {
   return {
     type: "Literal",
-    value: value,
-    raw: "${value}", // Recast compatibility!! escodegen does not need the extra quotes
+    value: String(value),
+    raw: `"${value}"`, // Recast compatibility!! escodegen does not need the extra quotes
   };
 }
 
+/**
+ * @desc Builds a binary expression node of the AST
+ * @param {*} left 
+ * @param {*} op 
+ * @param {*} right 
+ */
 function buildBinaryExpression(left, op, right) {
   return {
     type: "BinaryExpression",
@@ -31,17 +44,29 @@ function buildBinaryExpression(left, op, right) {
   };
 }
 
+/**
+ * @desc Builds a call expression node of the AST
+ * @param {*} functionName 
+ * @param {*} arguments 
+ * @param {*} reservedWord 
+ */
 function buildCallExpression(functionName, arguments, reservedWord = false) {
   return {
-    "type": "CallExpression",
-    "callee": {
-      "type": "Identifier",
-      "name": reservedWord ? functionName : $(functionName)
+    type: "CallExpression",
+    callee: {
+      type: "Identifier",
+      name: reservedWord ? functionName : $(functionName)
     },
-    "arguments": arguments
+    arguments: arguments
   }
 }
 
+/**
+ * @desc Builds a unary expression node of the AST
+ * @param {*} op 
+ * @param {*} argument 
+ * @param {*} prefix 
+ */
 function buildUnaryExpression(op, argument, prefix) {
   return {
     type: "UnaryExpression",
@@ -51,9 +76,12 @@ function buildUnaryExpression(op, argument, prefix) {
   };
 }
 
-
+/**
+ * @desc Builds an identifier or calls node of the AST
+ * @param {*} name 
+ * @param {*} calls 
+ */
 function buildIdentifierOrCalls(name, calls) {
-  // Write you code here
   let id = {
     type: "Identifier",
     name: name,
@@ -61,26 +89,34 @@ function buildIdentifierOrCalls(name, calls) {
   if (calls.length === 0) {
     return id;
   }
-  let node = id
+  debugger;
+  let node = id;
   calls.forEach(ast => {
     let parent = {
       type: "CallExpression",
       callee: node,
-      arguments: ast == null? [] : [ ast ],
+      arguments: ast === null? [] : [ast],
     };
     node = parent;
   });
   return node;
 }
 
-
+/**
+ * @desc Builds an identifier node of the AST
+ */
 function buildIdentifier(name) {
-  return buildIdentifierOrCalls(name, []);
+  return {
+    type: "Identifier",
+    name: name,
+  };
 }
 
-
+/**
+ * @desc Builds a variable declaration node of the AST
+ * @param {*} declarations 
+ */
 function buildVariableDeclaration(declarations) {
-  // Write you code here
   return {
     type: "VariableDeclaration",
     declarations: declarations,
@@ -88,9 +124,11 @@ function buildVariableDeclaration(declarations) {
   };
 }
 
-
+/**
+ * @desc Builds a variable declarator node of the AST
+ * @param {*} id 
+ */
 function buildVariableDeclarator(id) {
-  // Write you code here
   return {
     type: "VariableDeclarator",
     id: id,
@@ -98,8 +136,13 @@ function buildVariableDeclarator(id) {
   };
 }
 
+/**
+ * @desc Builds an assignment expression node of the AST
+ * @param {*} name 
+ * @param {*} operator 
+ * @param {*} right 
+ */
 function buildAssignmentExpression(name, operator, right) {
-  // Write you code here
   return {
     type: "AssignmentExpression",
     operator,
@@ -108,27 +151,24 @@ function buildAssignmentExpression(name, operator, right) {
   };
 }
 
+/**
+ * @desc Builds a sequence expression node of the AST
+ * @param {*} expressions 
+ */
 function buildSequenceExpression(expressions) {
-  // Write you code here
   return {
     type: "SequenceExpression",
     expressions: expressions,
   };
 }
 
-
-function buildUnaryExpression(operator, child, prefix = true) {
-  return {
-    type: "UnaryExpression",
-    operator,
-    argument: child,
-    prefix
-  };
-}
-
-
+/**
+ * @desc Builds a call member expression node of the AST
+ * @param {*} caller
+ * @param {*} names
+ * @param {*} args
+ */
 function buildCallMemberExpression(caller, names, args) {
-  // Write you code here
   let namesList = names.split('.');
   return {
     type: "CallExpression",
@@ -137,9 +177,12 @@ function buildCallMemberExpression(caller, names, args) {
   };
 }
 
-
+/**
+ * @desc Builds a member expression node of the AST
+ * @param {*} caller 
+ * @param {*} names 
+ */
 function buildMemberExpression(caller, names) {
-  // Write you code here
   if (names.length === 1) {
     return {
       type: "MemberExpression",
@@ -160,16 +203,33 @@ function buildMemberExpression(caller, names) {
   };
 }
 
+/**
+ * @desc Builds a min call expression node of the AST
+ * @param {*} left
+ * @param {*} right
+ * @param {*} reservedWord
+ */
 function buildMin(left, right, reservedWord = false) {
   return buildCallExpression('min', [left, right], reservedWord);
 }
 
+/**
+ * @desc Builds a max call expression node of the AST
+ * @param {*} left 
+ * @param {*} right 
+ * @param {*} reservedWord 
+ */
 function buildMax(left, right, reservedWord = false) {
   return buildCallExpression('max', [left, right], reservedWord);
 }
 
+/**
+ * @desc Builds a logical expression node of the AST
+ * @param {*} left
+ * @param {*} operator
+ * @param {*} right
+ */
 function buildLogicalExpression(left, operator, right) {
-  // Write you code here ASTEXPLORER
   return {
     type: "LogicalExpression",
     left: left,
@@ -178,8 +238,12 @@ function buildLogicalExpression(left, operator, right) {
   };
 }
 
+/**
+ * @desc Builds a function expression node of the AST
+ * @param {*} params 
+ * @param {*} exp 
+ */
 function buildFunctionExpression(params, exp) {
-  // Write you code here
   return {
     type: "FunctionExpression",
     id: null,
@@ -188,28 +252,44 @@ function buildFunctionExpression(params, exp) {
       type: "BlockStatement",
       body: [
         {
-          "type": "ReturnStatement",
-          "argument": exp,
+          type: "ReturnStatement",
+          argument: exp
         }
-      ],
+      ]
     },
     generator: false,
     async: false,
-    expression: false,
-  };
+    expression: false
+  }
 }
 
+/**
+ * @desc Builds an identifier call expression node of the AST
+ * @param {*} id 
+ * @param {*} calls 
+ */
 function buildIdCalls(id, calls) {
-  let n = buildIdentifier(id);
-  calls.forEach( args => {
+  let n = buildIdentifier(id); /// Para construir el nodo callee
+  calls.forEach(args => {
     let parent = {
       type: "CallExpression",
       callee: n,
-      arguments: args
+      arguments: args,
     }
     n = parent;
-  })
+  });
   return n;
+}
+
+/**
+ * @des Build an identifier node of the AST
+ * @param {*} name 
+ */
+function buildIdentifier(name) {
+  return {
+    type: "Identifier",
+    name: name,
+  };
 }
 
 module.exports = {
@@ -218,7 +298,6 @@ module.exports = {
   buildLiteral,
   buildCallExpression,
   buildUnaryExpression,
-  buildIdentifier,
   buildIdentifierOrCalls,
   buildVariableDeclaration,
   buildVariableDeclarator,
@@ -228,7 +307,8 @@ module.exports = {
   buildMemberExpression,
   buildMin,
   buildMax,
+  buildIdentifier,
   buildLogicalExpression,
   buildFunctionExpression,
-  buildIdCalls,
+  buildIdCalls
 }

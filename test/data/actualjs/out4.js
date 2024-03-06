@@ -1,7 +1,2 @@
 #!/usr/bin/env node
-const { Complex } = require("{{root}}/src/support-lib.js");  
-
-/* End of support code */
-
-
-Complex("2").mul(Complex("3").neg());
+const { Complex } = require("/home/usuario/practicas/practica_5/functions-manuel-sebastian-noda-alu0101499918/src/support-lib.js");Complex("2").mul(Complex("3").neg());

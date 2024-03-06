@@ -2,77 +2,77 @@
 const { 
   buildRoot, 
   buildBinaryExpression, 
+  buildUnaryExpression,
   buildLiteral, 
   buildCallExpression, 
-  buildIdentifier,
-  buildIdentifierOrCalls,
   buildAssignmentExpression,
   buildSequenceExpression,
   buildCallMemberExpression,
   buildMax,
   buildMin,
   buildFunctionExpression,
-  buildLogicalExpression,
+  buildIdentifier,
   buildIdCalls,
-  buildUnaryExpression,
+  buildLogicalExpression
+  // import the rest of the functions here
 } = require('./ast-build');
-const {$} = require('./utils.js')
+// Prefix with '$'' all user input variables to avoid collisions with our own compiler variables
+const { $ } = require('./utils.js')
+const { deb } = require('./deb.js')
 %}
 
 %left ','
+%nonassoc '=='
+%left '&&' '||'
 %right '='
-%nonassoc '&&'
-%nonassoc '||'
-%left '==' '<'
 %left '@'
 %left '&'
 %left '-' '+'
 %left '*' '/'
 %nonassoc UMINUS
 %right '**'
-%left '!''|'
+%left '!'
+
 %%
 es: e { return { ast: buildRoot($e) }; }
 ;
 
 e: 
-    e ',' e             { $$ = buildSequenceExpression([$e1, $e2]); }
-  | ID '=' e            { $$ = buildAssignmentExpression($($ID), '=', $e); }
-
-  | e '@' e             { $$ = buildMax($e1, $e2, true); }
-  | e '&' e             { $$ = buildMin($e1, $e2, true); }
-
-  | e '-' e             { $$ = buildCallMemberExpression($e1, 'sub', [$e2]); }
-  | e '+' e             { $$ = buildCallMemberExpression($e1, 'add', [$e2]); }
-  | e '*' e             { $$ = buildCallMemberExpression($e1, 'mul', [$e2]); }
-  | e '/' e             { $$ = buildCallMemberExpression($e1, 'div', [$e2]); }
-  | e '**' e            { $$ = buildCallMemberExpression($e1, 'pow', [$e2]); }
-  | '(' e ')'           { $$ = $2; }
-  | '-' e %prec UMINUS  { $$ = buildCallMemberExpression($e, 'neg', []); }
-  | e '!'               { $$ = buildCallExpression('factorial', [$e], true); }
-  | N                   { $$ = buildCallExpression('Complex',[buildLiteral($N)], true); }
-
-  | '|' e '|'           { $$ = buildCallMemberExpression($e, 'abs', []) }
-  | e '||' e            { $$ = buildLogicalExpression($e1, '||', $e2); }
-  | e '&&' e            { $$ = buildLogicalExpression($e1, '&&', $e2); } 
-  | TRUE                { $$ = buildLiteral(true); }
-  | FALSE               { $$ = buildLiteral(false); }
-  | e '==' e            { $$ = buildCallMemberExpression($e1, 'equals', [$e2]); }
-  | e '<' e             { $$ = buildCallMemberExpression($e1, 'lessThan', [$e2]);}
-  | '!' e               { $$ = buildUnaryExpression('!', $e); }
-
-  | PID '(' e ')'       { $$ = buildCallExpression($PID, [$e], true); }
-  | FUN '(' idOrEmpty ')' '{' e '}' { $$ = buildFunctionExpression($idOrEmpty, $e); }
-  | ID                  { $$ = buildIdentifier($($ID)); }
-  | ID calls            { $$ = buildIdCalls($($ID), $calls); }
+    e ',' e                             { $$ = buildSequenceExpression([$e1, $e2]); }
+  | ID '=' e                            { $$ = buildAssignmentExpression($($ID), '=', $e); }
+  | e '==' e                            { $$ = buildCallExpression('equals', [$e1, $e2], true);  }
+  | e '@' e                             { $$ = buildMax($e1, $e2, true); }
+  | e '&' e                             { $$ = buildMin($e1, $e2, true); }
+  | e '-' e                             { $$ = buildCallMemberExpression($e1, 'sub', [$e2]); }
+  | e '+' e                             { $$ = buildCallMemberExpression($e1, 'add', [$e2]); }
+  | e '*' e                             { $$ = buildCallMemberExpression($e1, 'mul', [$e2]); }
+  | e '/' e                             { $$ = buildCallMemberExpression($e1, 'div', [$e2]); }
+  | e '**' e                            { $$ = buildCallMemberExpression($e1, 'pow', [$e2]); }
+  | '-' e %prec UMINUS                  { $$ = buildCallMemberExpression($e, 'neg', []); }
+  | '(' e ')'                           { $$ = $2; }
+  | '|' e '|'                           { $$ = buildCallExpression('abs', [$e], true); }
+  | e '!'                               { $$ = buildCallExpression('factorial', [$e], true); }
+  | PID '(' e ')'                       { $$ = buildCallExpression($PID, [$e], true); }
+  | N                                   { $$ = buildCallExpression('Complex', [buildLiteral($N)], true); }
+  | ID                                  { $$ = buildIdentifier($($ID)); }
+  | FUN '(' idOrEmpty ')' '{' e '}'     { $$ = buildFunctionExpression($idOrEmpty, $e); }
+  | ID calls                            { $$ = buildIdCalls($($ID), $calls); }
+  // | ID calls                         { console.error(deb($ID), deb($calls)); process.exit(0); }
+  | TRUE                                { $$ = buildLiteral(true); } 
+  | FALSE                               { $$ = buildLiteral(false); }
+  | e '&&' e                            { $$ = buildLogicalExpression($e1, '&&', $e2); }
+  | e '||' e                            { $$ = buildLogicalExpression($e1, '||', $e2); }
+  | '!' e                               { $$ = buildUnaryExpression('!', $e1); }
 ;
 
-idOrEmpty:              { $$ = []; }
-  | ID                  { $$ = [buildIdentifier($($ID))]; }
+idOrEmpty:
+        { $$ = []; } /// Empty! --> Esta regla produce vacío
+  | ID  { $$ = [buildIdentifier($($ID))]; }
 ;
 
-calls: '(' e ')' calls  { $$ = [ [$e] ].concat($calls); }
-  | '(' ')' calls       { $$ = [ [] ].concat($calls);}
-  | '(' e ')'           { $$ = [ [$e] ]; }
-  | '('  ')'            { $$ = [ [] ]; }
+calls: 
+    '(' e ')' calls   { $$ = [[$e]].concat($calls); }
+  | '(' e ')'         { $$ = [[$e]]; }
+  | '('  ')' calls    { $$ = [[]].concat($calls); }
+  | '(' ')'           { $$ = [[]]; } /// No hay argumentos
 ;

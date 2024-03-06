@@ -83,17 +83,47 @@ export default [
     "actualjs": "out-recursive.js",
     "expectedjs": "correct-recursive.js",
     "expectedout": "correct-out-recursive.txt"
-  }
-  /**{
-    "input": "test-fun-scop1.calc",
-    "actualjs": "out-fun-scop1.js",
-    "expectedjs": "correct-fun-scop1.js",
-    "expectedout": "correct-out-fun-scop1.txt"
   },
   {
-    "input": "test-fun-scop2.calc",
-    "actualjs": "out-fun-scop2.js",
-    "expectedjs": "correct-fun-scop2.js",
-    "expectedout": "correct-out-fun-scop2.txt"
-  }*/
+    "input": "test-id.calc",
+    "actualjs": "out-id.js",
+    "expectedjs": "correct-id.js",
+    "expectedout": "correct-out-id.txt"
+  },
+  {
+    "input": "test-comma.calc",
+    "actualjs": "out-comma.js",
+    "expectedjs": "correct-comma.js",
+    "expectedout": "correct-out-comma.txt"
+  },
+  {
+    "input": "test-fun3.calc",
+    "actualjs": "out-fun3.js",
+    "expectedjs": "correct-fun3.js",
+    "expectedout": "correct-out-fun3.txt"
+  },
+  {
+    "input": "test-and.calc",
+    "actualjs": "out-and.js",
+    "expectedjs": "correct-and.js",
+    "expectedout": "correct-out-and.txt"
+  },
+  {
+    "input": "test-fact-fact.calc",
+    "actualjs": "out-fact-fact.js",
+    "expectedjs": "correct-fact-fact.js",
+    "expectedout": "correct-out-fact-fact.txt"
+  },
+  {
+    "input": "test-fun2.calc",
+    "actualjs": "out-fun2.js",
+    "expectedjs": "correct-fun2.js",
+    "expectedout": "correct-out-fun2.txt"
+  },
+  {
+    "input": "test-fun1.calc",
+    "actualjs": "out-fun1.js",
+    "expectedjs": "correct-fun1.js",
+    "expectedout": "correct-out-fun1.txt"
+  }
 ];
