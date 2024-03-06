@@ -7,7 +7,7 @@ Complex.prototype.lessThan = function (other) {
   return false;
 }
 
-let Operators = new Set(['add', 'sub', 'mul', 'div', 'equals', 'pow', 'neg', 'lessThan'])
+let Operators = new Set(['add', 'sub', 'mul', 'div', 'equals', 'pow', 'neg', 'lessThan','abs'])
 
 let oldComplex = Object.create(null);
 for (let op of Operators) {

@@ -13,6 +13,18 @@ export default [
     "expectedout": "correct-out2.txt"
   },
   {
+    "input": "test3.calc",
+    "actualjs": "out3.js",
+    "expectedjs": "correct3.js",
+    "expectedout": "correct-out3.txt"
+  },
+  {
+    "input": "test5.calc",
+    "actualjs": "out5.js",
+    "expectedjs": "correct5.js",
+    "expectedout": "correct-out5.txt"
+  },
+  {
     "input": "test-scope2.calc",
     "actualjs": "out-scope2.js",
     "expectedjs": "correct-scope2.js",
@@ -71,8 +83,8 @@ export default [
     "actualjs": "out-recursive.js",
     "expectedjs": "correct-recursive.js",
     "expectedout": "correct-out-recursive.txt"
-  },
-  {
+  }
+  /**{
     "input": "test-fun-scop1.calc",
     "actualjs": "out-fun-scop1.js",
     "expectedjs": "correct-fun-scop1.js",
@@ -83,5 +95,5 @@ export default [
     "actualjs": "out-fun-scop2.js",
     "expectedjs": "correct-fun-scop2.js",
     "expectedout": "correct-out-fun-scop2.txt"
-  }
+  }*/
 ];

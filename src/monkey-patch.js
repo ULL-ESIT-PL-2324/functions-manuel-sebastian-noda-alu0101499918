@@ -1,5 +1,3 @@
-const { default: Complex } = require("complex.js");
-
 let Operators = {
   add: '+',
   mul: '*',

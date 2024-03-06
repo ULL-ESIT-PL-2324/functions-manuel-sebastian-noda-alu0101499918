@@ -25,7 +25,7 @@ class Scope {
      * Establece una variable como inicializada.
      * @param {string} name - El nombre de la variable.
      */
-  setAsIninitalized(name) {
+  setAsInitialized(name) {
     this.initialized.add(name);
   }
   /**

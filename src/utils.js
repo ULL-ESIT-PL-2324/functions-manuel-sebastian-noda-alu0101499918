@@ -24,7 +24,7 @@ function difference(setA, setB) {
 
 function RegexpFromNames(names) {
   // Escape regexp special characters
-  let escaped = names.map(n => n.replace(/[$*.^]/, '[$&]')) 
+  let escaped = names.map(n => n.replace(/[$*.^]/, '[$&]'))
   return new RegExp('\\b'+escaped.join('|')+'\\b');
 }
 

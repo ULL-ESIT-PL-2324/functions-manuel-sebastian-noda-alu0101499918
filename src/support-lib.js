@@ -34,6 +34,7 @@ const min = function(a, b) {
 const print = x => { console.log(x); return x; } 
 
 module.exports = {
+  Complex,
   print,
   factorial,
   max,

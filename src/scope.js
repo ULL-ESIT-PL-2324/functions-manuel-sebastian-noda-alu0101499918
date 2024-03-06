@@ -41,7 +41,7 @@ const scopeAnalysis = (dAst) => {
         node.body.body.unshift(scope.buildVariableDeclaration());
       }
       node.scope = scope;
-      let d = scope.notDeclareMessage();
+      let d = scope.notDeclaredMessage();
       if(d) console.error(d + 'used in function scope');
 
       scope = scope.parent;

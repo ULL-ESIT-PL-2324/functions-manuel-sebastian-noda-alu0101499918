@@ -1,4 +1,7 @@
 #!/usr/bin/env node
-const Complex = require("/Users/casianorodriguezleon/campus-virtual/2223/pl2223/practicas/drafts/functions-solution/src/complex.js");  
-const print = x => { console.log(x); return x; };
+const { print, Complex } = require("{{root}}/src/support-lib.js");  
+
+/* End of support code */
+
+
 print(Complex("1").neg().pow(Complex("0.5")));

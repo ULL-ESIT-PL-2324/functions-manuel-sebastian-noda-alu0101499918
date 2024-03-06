@@ -13,11 +13,12 @@ function buildRoot(child) {
   };
 }
 
+
 function buildLiteral(value) {
   return {
     type: "Literal",
     value: value,
-    raw: `"${value}"`, // Recast compatibility!! escodegen does not need the extra quotes
+    raw: "${value}", // Recast compatibility!! escodegen does not need the extra quotes
   };
 }
 
@@ -50,15 +51,36 @@ function buildUnaryExpression(op, argument, prefix) {
   };
 }
 
+
 function buildIdentifierOrCalls(name, calls) {
   // Write you code here
+  let id = {
+    type: "Identifier",
+    name: name,
+  };
+  if (calls.length === 0) {
+    return id;
+  }
+  let node = id
+  calls.forEach(ast => {
+    let parent = {
+      type: "CallExpression",
+      callee: node,
+      arguments: ast == null? [] : [ ast ],
+    };
+    node = parent;
+  });
+  return node;
 }
+
 
 function buildIdentifier(name) {
   return buildIdentifierOrCalls(name, []);
 }
 
+
 function buildVariableDeclaration(declarations) {
+  // Write you code here
   return {
     type: "VariableDeclaration",
     declarations: declarations,
@@ -66,7 +88,9 @@ function buildVariableDeclaration(declarations) {
   };
 }
 
+
 function buildVariableDeclarator(id) {
+  // Write you code here
   return {
     type: "VariableDeclarator",
     id: id,
@@ -75,6 +99,7 @@ function buildVariableDeclarator(id) {
 }
 
 function buildAssignmentExpression(name, operator, right) {
+  // Write you code here
   return {
     type: "AssignmentExpression",
     operator,
@@ -84,11 +109,13 @@ function buildAssignmentExpression(name, operator, right) {
 }
 
 function buildSequenceExpression(expressions) {
+  // Write you code here
   return {
     type: "SequenceExpression",
     expressions: expressions,
   };
 }
+
 
 function buildUnaryExpression(operator, child, prefix = true) {
   return {
@@ -99,7 +126,9 @@ function buildUnaryExpression(operator, child, prefix = true) {
   };
 }
 
+
 function buildCallMemberExpression(caller, names, args) {
+  // Write you code here
   let namesList = names.split('.');
   return {
     type: "CallExpression",
@@ -108,7 +137,9 @@ function buildCallMemberExpression(caller, names, args) {
   };
 }
 
+
 function buildMemberExpression(caller, names) {
+  // Write you code here
   if (names.length === 1) {
     return {
       type: "MemberExpression",
@@ -138,23 +169,27 @@ function buildMax(left, right, reservedWord = false) {
 }
 
 function buildLogicalExpression(left, operator, right) {
-  // Write you code here
+  // Write you code here ASTEXPLORER
+  return {
+    type: "LogicalExpression",
+    left: left,
+    operator: operator,
+    right: right,
+  };
 }
 
 function buildFunctionExpression(params, exp) {
+  // Write you code here
   return {
     type: "FunctionExpression",
     id: null,
     params: params,
     body: {
       type: "BlockStatement",
-      body:[
+      body: [
         {
           "type": "ReturnStatement",
-          "argument": {
-            "type": "Identifier",
-            "name": "$b"
-          }
+          "argument": exp,
         }
       ],
     },
@@ -162,28 +197,6 @@ function buildFunctionExpression(params, exp) {
     async: false,
     expression: false,
   };
-}
-
-
-
-function buildIdentifierOrCalls(name, calls) {
-  let id = {
-    type: "Identifier",
-    name: name,
-  };
-  if(calls.length === 0) return id;
-
-  debugger;
-  let node = id;
-  calls.forEach(ast => {
-    let parent = {
-      type: "CallExpression",
-      callee: node,
-      arguments: ast === null? [] : [ ast ],
-    };
-    node = parent;
-  });
-  return node;
 }
 
 function buildIdCalls(id, calls) {
@@ -205,16 +218,17 @@ module.exports = {
   buildLiteral,
   buildCallExpression,
   buildUnaryExpression,
+  buildIdentifier,
+  buildIdentifierOrCalls,
   buildVariableDeclaration,
   buildVariableDeclarator,
-  buildIdentifierOrCalls,
   buildAssignmentExpression,
   buildSequenceExpression,
   buildCallMemberExpression,
+  buildMemberExpression,
   buildMin,
   buildMax,
   buildLogicalExpression,
   buildFunctionExpression,
-  buildIdCalls
-  // export whatever you need
+  buildIdCalls,
 }
