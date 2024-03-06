@@ -1,8 +1,11 @@
 const { $ } = require('./utils.js')
-
 /**
- * @desc Builds the root node of the AST
- * @param {*} child
+ * @brief Construye el nodo raíz del AST.
+ *
+ * Esta función construye el nodo raíz del AST con el nodo hijo dado.
+ *
+ * @param {*} child - El nodo hijo.
+ * @return {ASTNode} El nodo raíz.
  */
 function buildRoot(child) {
   return {
@@ -18,8 +21,12 @@ function buildRoot(child) {
 }
 
 /**
- * @desc Builds a literal node of the AST
- * @param {*} value 
+ * @brief Construye un nodo literal del AST.
+ *
+ * Esta función construye un nodo literal con el valor especificado.
+ *
+ * @param {*} value - El valor del literal.
+ * @return {ASTNode} El nodo literal.
  */
 function buildLiteral(value) {
   return {
@@ -30,10 +37,14 @@ function buildLiteral(value) {
 }
 
 /**
- * @desc Builds a binary expression node of the AST
- * @param {*} left 
- * @param {*} op 
- * @param {*} right 
+ * @brief Construye un nodo de expresión binaria del AST.
+ *
+ * Esta función construye un nodo de expresión binaria con los operandos izquierdo y derecho y el operador especificados.
+ *
+ * @param {*} left - El operando izquierdo.
+ * @param {*} op - El operador.
+ * @param {*} right - El operando derecho.
+ * @return {ASTNode} El nodo de expresión binaria.
  */
 function buildBinaryExpression(left, op, right) {
   return {
@@ -43,13 +54,18 @@ function buildBinaryExpression(left, op, right) {
     right: right,
   };
 }
-
 /**
- * @desc Builds a call expression node of the AST
- * @param {*} functionName 
- * @param {*} arguments 
- * @param {*} reservedWord 
+ * @brief Construye un nodo de expresión de llamada del AST.
+ *
+ * Esta función construye un nodo de expresión de llamada con la función, los argumentos y la palabra reservada especificados.
+ *
+ * @param {*} functionName - El nombre de la función.
+ * @param {*} arguments - Los argumentos de la llamada.
+ * @param {boolean} [reservedWord=false] - Indica si es una palabra reservada.
+ * @return {ASTNode} El nodo de expresión de llamada.
  */
+
+
 function buildCallExpression(functionName, arguments, reservedWord = false) {
   return {
     type: "CallExpression",
@@ -62,11 +78,17 @@ function buildCallExpression(functionName, arguments, reservedWord = false) {
 }
 
 /**
- * @desc Builds a unary expression node of the AST
- * @param {*} op 
- * @param {*} argument 
- * @param {*} prefix 
+ * @brief Construye un nodo de expresión unaria del AST.
+ *
+ * Esta función construye un nodo de expresión unaria con el operador, el argumento y la indicación de prefijo especificados.
+ *
+ * @param {*} op - El operador.
+ * @param {*} argument - El argumento de la expresión unaria.
+ * @param {boolean} prefix - Indica si es un prefijo.
+ * @return {ASTNode} El nodo de expresión unaria.
  */
+
+
 function buildUnaryExpression(op, argument, prefix) {
   return {
     type: "UnaryExpression",
@@ -77,10 +99,15 @@ function buildUnaryExpression(op, argument, prefix) {
 }
 
 /**
- * @desc Builds an identifier or calls node of the AST
- * @param {*} name 
- * @param {*} calls 
+ * @brief Construye un nodo de identificador o llamadas del AST.
+ *
+ * Esta función construye un nodo de identificador o llamadas con el nombre y las llamadas especificadas.
+ *
+ * @param {*} name - El nombre del identificador.
+ * @param {*} calls - Las llamadas.
+ * @return {ASTNode} El nodo de identificador o llamadas.
  */
+
 function buildIdentifierOrCalls(name, calls) {
   let id = {
     type: "Identifier",
@@ -102,9 +129,7 @@ function buildIdentifierOrCalls(name, calls) {
   return node;
 }
 
-/**
- * @desc Builds an identifier node of the AST
- */
+
 function buildIdentifier(name) {
   return {
     type: "Identifier",
@@ -136,12 +161,7 @@ function buildVariableDeclarator(id) {
   };
 }
 
-/**
- * @desc Builds an assignment expression node of the AST
- * @param {*} name 
- * @param {*} operator 
- * @param {*} right 
- */
+
 function buildAssignmentExpression(name, operator, right) {
   return {
     type: "AssignmentExpression",
@@ -151,10 +171,7 @@ function buildAssignmentExpression(name, operator, right) {
   };
 }
 
-/**
- * @desc Builds a sequence expression node of the AST
- * @param {*} expressions 
- */
+
 function buildSequenceExpression(expressions) {
   return {
     type: "SequenceExpression",
@@ -162,12 +179,7 @@ function buildSequenceExpression(expressions) {
   };
 }
 
-/**
- * @desc Builds a call member expression node of the AST
- * @param {*} caller
- * @param {*} names
- * @param {*} args
- */
+
 function buildCallMemberExpression(caller, names, args) {
   let namesList = names.split('.');
   return {
@@ -177,11 +189,7 @@ function buildCallMemberExpression(caller, names, args) {
   };
 }
 
-/**
- * @desc Builds a member expression node of the AST
- * @param {*} caller 
- * @param {*} names 
- */
+
 function buildMemberExpression(caller, names) {
   if (names.length === 1) {
     return {
@@ -203,32 +211,17 @@ function buildMemberExpression(caller, names) {
   };
 }
 
-/**
- * @desc Builds a min call expression node of the AST
- * @param {*} left
- * @param {*} right
- * @param {*} reservedWord
- */
+
 function buildMin(left, right, reservedWord = false) {
   return buildCallExpression('min', [left, right], reservedWord);
 }
 
-/**
- * @desc Builds a max call expression node of the AST
- * @param {*} left 
- * @param {*} right 
- * @param {*} reservedWord 
- */
+
 function buildMax(left, right, reservedWord = false) {
   return buildCallExpression('max', [left, right], reservedWord);
 }
 
-/**
- * @desc Builds a logical expression node of the AST
- * @param {*} left
- * @param {*} operator
- * @param {*} right
- */
+
 function buildLogicalExpression(left, operator, right) {
   return {
     type: "LogicalExpression",
@@ -238,11 +231,7 @@ function buildLogicalExpression(left, operator, right) {
   };
 }
 
-/**
- * @desc Builds a function expression node of the AST
- * @param {*} params 
- * @param {*} exp 
- */
+
 function buildFunctionExpression(params, exp) {
   return {
     type: "FunctionExpression",
@@ -263,13 +252,9 @@ function buildFunctionExpression(params, exp) {
   }
 }
 
-/**
- * @desc Builds an identifier call expression node of the AST
- * @param {*} id 
- * @param {*} calls 
- */
+
 function buildIdCalls(id, calls) {
-  let n = buildIdentifier(id); /// Para construir el nodo callee
+  let n = buildIdentifier(id); 
   calls.forEach(args => {
     let parent = {
       type: "CallExpression",
@@ -281,10 +266,7 @@ function buildIdCalls(id, calls) {
   return n;
 }
 
-/**
- * @des Build an identifier node of the AST
- * @param {*} name 
- */
+
 function buildIdentifier(name) {
   return {
     type: "Identifier",

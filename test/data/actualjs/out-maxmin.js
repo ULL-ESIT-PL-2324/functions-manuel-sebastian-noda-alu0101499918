@@ -1,5 +1,10 @@
 #!/usr/bin/env node
-const { max, Complex, min, print } = require("/home/usuario/practicas/practica_5/functions-manuel-sebastian-noda-alu0101499918/src/support-lib.js");let $a;
+const { max, Complex, min, print } = require("{{root}}/src/support-lib.js");  
+
+/* End of support code */
+
+
+let $a;
 
 $a = max(
     Complex("2").add(Complex("4")),
